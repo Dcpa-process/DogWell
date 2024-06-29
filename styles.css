@@ -1,0 +1,45 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+#slotsContainer {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.slot {
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.slot.available {
+    background-color: green;
+    color: white;
+}
+
+.slot.in-use {
+    background-color: yellow;
+    color: black;
+    cursor: not-allowed;
+}
+
+.slot.not-available {
+    background-color: red;
+    color: white;
+    cursor: not-allowed;
+}
+
+.slot.selected {
+    border: 2px solid blue;
+}
+
+button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
