@@ -1,3 +1,6 @@
+# Ignore Firebase config
+firebase_config.js
+
 # Dependency directories
 node_modules/
 bower_components/
