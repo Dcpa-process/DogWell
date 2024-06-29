@@ -5,6 +5,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let selectedSlots = [];
 
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            console.log('User signed in:', user);
+        } else {
+            console.log('No user signed in');
+        }
+    });
+
     selectedDateInput.addEventListener('change', loadSlots);
     bookSlotsButton.addEventListener('click', bookSelectedSlots);
 
@@ -12,11 +20,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedDate = selectedDateInput.value;
         if (!selectedDate) return;
 
-        // Fetch slot availability from the backend
-        fetch(`/api/slots?date=${selectedDate}`)
-            .then(response => response.json())
-            .then(data => {
-                displaySlots(data.slots);
+        db.collection('slots').where('date', '==', selectedDate).get()
+            .then(querySnapshot => {
+                let slots = querySnapshot.docs.map(doc => doc.data());
+                displaySlots(slots);
             })
             .catch(error => {
                 console.error('Error fetching slots:', error);
@@ -62,32 +69,31 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
+        const user = firebase.auth().currentUser;
+        if (!user) {
+            alert('Please sign in to book slots.');
+            return;
+        }
+
         const formData = {
-            user_id: 'user_123',  // Replace with actual user ID
-            module_id: 'module_456',  // Replace with actual module ID
+            user_id: user.uid,
             date: selectedDate,
             slots: selectedSlots
         };
 
-        fetch('/api/book_slots', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
+        formData.slots.forEach(slot => {
+            db.collection('slots').add({
+                user_id: formData.user_id,
+                date: formData.date,
+                time: slot,
+                status: 'booked'
+            }).then(() => {
                 alert('Slots booked successfully');
-                loadSlots();  // Reload slots to update the UI
-            } else {
-                alert(`Failed to book slots: ${data.message}`);
-            }
-        })
-        .catch(error => {
-            console.error('Error booking slots:', error);
-            alert('An error occurred while booking the slots');
+                loadSlots();
+            }).catch(error => {
+                console.error('Error booking slots:', error);
+                alert('An error occurred while booking the slots');
+            });
         });
     }
 });
