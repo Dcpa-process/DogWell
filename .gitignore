@@ -1,3 +1,10 @@
+# Dependency directories
+node_modules/
+bower_components/
+
+# Firebase configuration
+/key/
+
 # Python
 *.pyc
 __pycache__/
