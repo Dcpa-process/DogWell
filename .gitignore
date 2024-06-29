@@ -1,0 +1,34 @@
+# Python
+*.pyc
+__pycache__/
+
+# Environment
+.env
+
+# SQLite database
+*.db
+
+# Flask
+instance/
+*.pyc
+
+# Visual Studio Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Node.js
+node_modules/
+
+# Logs
+*.log
+
+# Other
+*.sqlite3
+*.db3
+*.sql3
+*.tar.gz
+*.zip
+*.tmp
+*.temp
