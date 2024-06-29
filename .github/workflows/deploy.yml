@@ -1,0 +1,38 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Triggers the workflow on push to the main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Specifies the environment the job will run on
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2  # Checks out your repository code so the workflow can access it
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2  # Sets up Node.js environment
+      with:
+        node-version: '14'  # Specifies the Node.js version
+
+    - name: Create Firebase Config File
+      env:
+        FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}  # Accesses the Firebase config secret
+      run: |
+        echo "const firebaseConfig = $FIREBASE_CONFIG;
+        firebase.initializeApp(firebaseConfig);" > ./firebase_config.js  # Creates the firebase_config.js file
+
+    - name: Install dependencies
+      run: npm install  # Installs project dependencies
+
+    - name: Build project
+      run: npm run build  # Builds the project
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3  # Deploys the built project to GitHub Pages
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}  # Uses the automatically provided GitHub token
+        publish_dir: ./dist  # Specifies the directory to publish to GitHub Pages
