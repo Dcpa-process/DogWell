@@ -13,10 +13,9 @@ This is a web application for booking dog walking modules using a calendar-like 
 ## Setup
 
 1. Clone the repository.
-2. Create a `firebase_key.json` file in a `key` directory on your machine with the Firebase configuration.
-3. Update `firebase_config.js` with the configuration from your `firebase_key.json` file.
-4. Open `index.html` in your browser to run the app locally.
+2. Add a GitHub Secret named `FIREBASE_CONFIG` with your Firebase configuration JSON.
+3. Ensure your GitHub Actions workflow fetches this secret and creates the `firebase_config.js` file.
 
 ## Deployment
 
-This project is deployed using GitHub Pages. To deploy, push your changes to the `main` branch of your GitHub repository and set up GitHub Pages in the repository settings.
+This project is deployed using GitHub Pages. The deployment script will fetch the Firebase configuration from the repository secrets before building and deploying the project.
